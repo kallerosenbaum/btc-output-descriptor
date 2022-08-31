@@ -7,6 +7,7 @@ const KeyExpression = require('./KeyExpression');
 const AddrExpression = require('./AddrExpression');
 const HexExpression = require('./HexExpression');
 const NumberExpression = require('./NumberExpression');
+const TapKeyExpression = require('./TapKeyExpression');
 const {
     descriptorChecksum,
     isValidChecksum
@@ -23,7 +24,8 @@ const TYPE = Object.freeze({
     multi: 'multi',
     sortedmulti: 'sortedmulti',
     addr: 'addr',
-    raw: 'raw'
+    raw: 'raw',
+    tr: 'tr'
 });
 const ANY_TYPE = '_any';
 const ROOT_REG_EXP_FORMAT = '^(?<script>![reg_exp_format])(?:#(?<checksum>[a-z0-9]{8}))?$';
@@ -151,6 +153,7 @@ class ScriptExpression extends Expression {
                 childExpression = lastArgType.parse(network, arg, scriptType);
             }
             catch (err) {
+                console.log(err)
                 throw new Error(`Bitcoin output descriptor [ScriptExpression#parse]: error parsing argument #${idx + 1} (${arg}): ${err}`);
             }
 
@@ -200,6 +203,10 @@ class ScriptExpression extends Expression {
 
             case ScriptExpression.Type.raw:
                 script = new (require('./RawScript'))(network, text, null, children, checksum);
+                break;
+
+            case ScriptExpression.Type.tr:
+                script = new (require('./TrScript'))(network, text, null, children, checksum);
                 break;
 
             default:
@@ -294,6 +301,15 @@ const SCRIPT_INFO = Object.freeze({
         ],
         argTypes: [
             HexExpression
+        ]
+    },
+    tr: {
+        token: 'tr',
+        parentExclude: [
+            ANY_TYPE
+        ],
+        argTypes: [
+            TapKeyExpression
         ]
     }
 });

@@ -64,7 +64,6 @@ class ExtPairKey extends KeyExpression {
                 catch (err) {
                     throw new Error(`Bitcoin output descriptor [ExtPairKey#_pubKeysFromRange]: error deriving extended key: ${err}`);
                 }
-
                 pubKeys.push(
                     Options.ignoreNonexistentPathIndex || derivedExtKeyPair.index === KeyExpression.realPathIndex(idx, isHardened)
                     ? derivedExtKeyPair.publicKey

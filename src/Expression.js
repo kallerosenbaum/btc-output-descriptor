@@ -9,7 +9,8 @@ const TYPE = Object.freeze({
     key: 'key',
     addr: 'addr',
     hex: 'hex',
-    number: 'number'
+    number: 'number',
+    tapkey: 'tapkey'
 });
 
 class Expression {
